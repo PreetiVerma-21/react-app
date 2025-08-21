@@ -1,0 +1,117 @@
+// Converted from primary-pink-button.css to SCSS
+.primary-pink-button-container {
+  display: flex;
+  position: relative;
+
+  .primary-pink-button-button {
+    color: var(--dl-color-gray-white);
+    outline: none;
+    background: linear-gradient( 310deg ,#43cea2,#185a9d);
+    box-shadow: 0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%);
+    transition: all .15s ease-in;
+    padding-top: var(--dl-layout-space-triplequarterunit);
+    border-width: 0px;
+    padding-left: var(--dl-layout-space-unitandahalfunit);
+    border-radius: 1.875rem;
+    padding-right: var(--dl-layout-space-unitandahalfunit);
+    padding-bottom: var(--dl-layout-space-triplequarterunit);
+    &:hover {
+      cursor: pointer;
+      transform: scale(1.02);
+    }
+  }
+}
+
+// Converted from outline-black-button.css to SCSS
+.outline-black-button-container {
+  display: flex;
+  position: relative;
+
+  .outline-black-button-button {
+    color: var(--dl-color-secondary-700);
+    cursor: pointer;
+    outline: none;
+    min-width: 150px;
+    transition: 0.3s;
+    padding-top: var(--dl-layout-space-triplequarterunit);
+    padding-left: var(--dl-layout-space-fourunits);
+    border-radius: var(--dl-layout-radius-radius75);
+    padding-right: var(--dl-layout-space-fourunits);
+    padding-bottom: var(--dl-layout-space-triplequarterunit);
+    &:hover {
+      transform: scale(1.02);
+    }
+  }
+}
+
+// Converted from outline-blue-button.css to SCSS
+.outline-blue-button-container {
+  display: flex;
+  position: relative;
+
+  .outline-blue-button-button {
+    color: var(--dl-color-blue-500);
+    cursor: pointer;
+    background: white;
+    transition: all .15s ease-in;
+    padding-top: var(--dl-layout-space-halfunit);
+    border-color: var(--dl-color-blue-500);
+    border-width: 1px;
+    padding-left: var(--dl-layout-space-doubleunit);
+    border-radius: var(--dl-layout-radius-radius5);
+    padding-right: var(--dl-layout-space-doubleunit);
+    padding-bottom: var(--dl-layout-space-halfunit);
+    background-color: transparent;
+    &:hover {
+      transform: scale(1.02);
+    }
+  }
+}
+
+// Converted from outline-gray-button.css to SCSS
+.outline-gray-button-container {
+  display: flex;
+  position: relative;
+
+  .outline-gray-button-button {
+    color: var(--dl-color-secondary-200);
+    outline: none;
+    transition: all .15s ease-in;
+    padding-top: var(--dl-layout-space-triplequarterunit);
+    border-color: var(--dl-color-secondary-200);
+    padding-left: var(--dl-layout-space-unitandahalfunit);
+    border-radius: 1.875rem;
+    padding-right: var(--dl-layout-space-unitandahalfunit);
+    padding-bottom: var(--dl-layout-space-triplequarterunit);
+    &:hover {
+      cursor: pointer;
+      transform: scale(1.02);
+    }
+  }
+}
+
+
+// Converted from primary-blue-button.css to SCSS
+.primary-blue-button-container {
+  display: flex;
+  position: relative;
+
+  .primary-blue-button-button {
+    color: var(--dl-color-gray-white);
+    outline: none;
+    background: linear-gradient(310deg,#2152ff,#21d4fd);
+    box-shadow: 0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%);
+    transition: all .15s ease-in;
+    padding-top: var(--dl-layout-space-triplequarterunit);
+    border-width: 0px;
+    padding-left: var(--dl-layout-space-unitandahalfunit);
+    border-radius: 1.875rem;
+    padding-right: var(--dl-layout-space-unitandahalfunit);
+    padding-bottom: var(--dl-layout-space-triplequarterunit);
+    &:hover {
+      cursor: pointer;
+      transform: scale(1.02);
+    }
+  }
+}
+
