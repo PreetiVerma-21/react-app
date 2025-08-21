@@ -20,7 +20,20 @@ const Header = () => {
       <nav className="header-nav">
         <div className="header-container1">
           <Link to="/login" className="header-navlink1 Large">
-            Soft UI Design System
+            <span
+              style={{
+                background: 'linear-gradient(135deg, #43cea2 0%, #185a9d 100%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text',
+                color: 'transparent',
+                fontWeight: 700,
+                fontSize: '1.5rem',
+                letterSpacing: '0.5px',
+              }}
+            >
+              Soft UI Design System
+            </span>
           </Link>
           <div className="header-menu1">
             <Link to="/" className="header-navlink2 Large">

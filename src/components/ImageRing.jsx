@@ -1,147 +1,222 @@
-import React, { useEffect, useRef, useState, useCallback } from "react";
+"use client";
+import React, { useEffect, useRef, useState, useMemo } from "react";
+import { motion, AnimatePresence, useMotionValue, easeOut, animate } from "framer-motion";
 
-const ImageRing  = ({
+
+function ImageRing({
   images,
-  radius = 10,
-  width = 500,
-  height = 500,
-  autoRotate = false,
-  rotationSpeed = 10,
-}) => {
-  // Responsive: use 3D ring on large screens, horizontal scroll on small screens
-  const [isRing, setIsRing] = useState(() => typeof window !== 'undefined' ? window.innerWidth > 900 : true);
-
-  useEffect(() => {
-    const handleResize = () => setIsRing(window.innerWidth > 900);
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
-
+  width = 300,
+  perspective = 2000,
+  imageDistance = 500,
+  initialRotation = 180,
+  animationDuration = 1.5,
+  staggerDelay = 0.1,
+  hoverOpacity = 0.5,
+  containerClassName = "",
+  ringClassName = "",
+  imageClassName = "",
+  backgroundColor,
+  draggable = true,
+  ease = "easeOut",
+  mobileBreakpoint = 768,
+  mobileScaleFactor = 0.8,
+  inertiaPower = 0.8,
+  inertiaTimeConstant = 300,
+  inertiaVelocityMultiplier = 20,
+}) {
+  const containerRef = useRef(null);
   const ringRef = useRef(null);
-  const [angle, setAngle] = useState(0);
-  const dragging = useRef(false);
+
+  const rotationY = useMotionValue(initialRotation);
   const startX = useRef(0);
+  const currentRotationY = useRef(initialRotation);
+  const isDragging = useRef(false);
+  const velocity = useRef(0);
 
-  // Auto-rotate
+  const [currentScale, setCurrentScale] = useState(1);
+  const [showImages, setShowImages] = useState(false);
+
+  const angle = useMemo(() => 360 / images.length, [images.length]);
+
+  const getBgPos = (imageIndex, currentRot, scale) => {
+    const scaledImageDistance = imageDistance * scale;
+    const effectiveRotation = currentRot - 180 - imageIndex * angle;
+    const parallaxOffset = ((effectiveRotation % 360 + 360) % 360) / 360;
+    return `${-(parallaxOffset * (scaledImageDistance / 1.5))}px 0px`;
+  };
+
   useEffect(() => {
-    if (!autoRotate) return;
-    let frame;
-    const animate = () => {
-      setAngle((prev) => prev + rotationSpeed);
-      frame = requestAnimationFrame(animate);
-    };
-    frame = requestAnimationFrame(animate);
-    return () => cancelAnimationFrame(frame);
-  }, [autoRotate, rotationSpeed]);
+    const unsubscribe = rotationY.on("change", (latestRotation) => {
+      if (ringRef.current) {
+        Array.from(ringRef.current.children).forEach((imgElement, i) => {
+          imgElement.style.backgroundPosition = getBgPos(i, latestRotation, currentScale);
+        });
+      }
+      currentRotationY.current = latestRotation;
+    });
+    return () => unsubscribe();
+  }, [rotationY, images.length, imageDistance, currentScale, angle]);
 
-  // Drag to rotate (only for ring mode)
-  const handleMouseMove = useCallback((e) => {
-    if (!dragging.current) return;
-    const delta = e.clientX - startX.current;
-    setAngle((prev) => prev + delta * 0.2);
-    startX.current = e.clientX;
+  useEffect(() => {
+    const handleResize = () => {
+      const viewportWidth = window.innerWidth;
+      const newScale = viewportWidth <= mobileBreakpoint ? mobileScaleFactor : 1;
+      setCurrentScale(newScale);
+    };
+
+    window.addEventListener("resize", handleResize);
+    handleResize();
+
+    return () => window.removeEventListener("resize", handleResize);
+  }, [mobileBreakpoint, mobileScaleFactor]);
+
+  useEffect(() => {
+    setShowImages(true);
   }, []);
 
-  const handleMouseUp = useCallback(() => {
-    dragging.current = false;
-    document.body.style.userSelect = '';
-    window.removeEventListener("mousemove", handleMouseMove);
-    window.removeEventListener("mouseup", handleMouseUp);
-  }, [handleMouseMove]);
+  const handleDragStart = (event) => {
+    if (!draggable) return;
+    isDragging.current = true;
+    const clientX = "touches" in event ? event.touches[0].clientX : event.clientX;
+    startX.current = clientX;
+    rotationY.stop();
+    velocity.current = 0;
 
-  const handleMouseDown = useCallback((e) => {
-    if (!isRing) return;
-    dragging.current = true;
-    startX.current = e.clientX;
-    document.body.style.userSelect = 'none';
-    window.addEventListener("mousemove", handleMouseMove);
-    window.addEventListener("mouseup", handleMouseUp);
-  }, [isRing, handleMouseMove, handleMouseUp]);
+    if (ringRef.current) ringRef.current.style.cursor = "grabbing";
 
-  // Clean up listeners on unmount
-  useEffect(() => {
-    return () => {
-      window.removeEventListener("mousemove", handleMouseMove);
-      window.removeEventListener("mouseup", handleMouseUp);
-    };
-  }, [handleMouseMove, handleMouseUp]);
+    document.addEventListener("mousemove", handleDrag);
+    document.addEventListener("mouseup", handleDragEnd);
+    document.addEventListener("touchmove", handleDrag);
+    document.addEventListener("touchend", handleDragEnd);
+  };
+
+  const handleDrag = (event) => {
+    if (!draggable || !isDragging.current) return;
+    const clientX = "touches" in event ? event.touches[0].clientX : event.clientX;
+    const deltaX = clientX - startX.current;
+
+    velocity.current = -deltaX * 0.5;
+    rotationY.set(currentRotationY.current + velocity.current);
+    startX.current = clientX;
+  };
+
+  const handleDragEnd = () => {
+    isDragging.current = false;
+    if (ringRef.current) {
+      ringRef.current.style.cursor = "grab";
+      currentRotationY.current = rotationY.get();
+    }
+
+    document.removeEventListener("mousemove", handleDrag);
+    document.removeEventListener("mouseup", handleDragEnd);
+    document.removeEventListener("touchmove", handleDrag);
+    document.removeEventListener("touchend", handleDragEnd);
+
+    const initial = rotationY.get();
+    const velocityBoost = velocity.current * inertiaVelocityMultiplier;
+    const target = initial + velocityBoost;
+
+    animate(initial, target, {
+      type: "inertia",
+      velocity: velocityBoost,
+      power: inertiaPower,
+      timeConstant: inertiaTimeConstant,
+      restDelta: 0.5,
+      modifyTarget: (target) => Math.round(target / angle) * angle,
+      onUpdate: (latest) => rotationY.set(latest),
+    });
+
+    velocity.current = 0;
+  };
+
+  const imageVariants = {
+    hidden: { y: 200, opacity: 0 },
+    visible: { y: 0, opacity: 1 },
+  };
 
   return (
-    <div className="ring-container">
-      {isRing ? (
-        <div
+    <div
+      ref={containerRef}
+      className={`draggable-3d-container ${containerClassName}`}
+      style={{
+        backgroundColor,
+        transform: `scale(${currentScale})`,
+        transformOrigin: "center center",
+      }}
+      onMouseDown={draggable ? handleDragStart : undefined}
+      onTouchStart={draggable ? handleDragStart : undefined}
+    >
+      <div
+        style={{
+          perspective: `${perspective}px`,
+          width: `${width}px`,
+          height: `${width * 1.33}px`,
+          position: "absolute",
+          left: "50%",
+          top: "50%",
+          transform: "translate(-50%, -50%)",
+        }}
+      >
+        <motion.div
           ref={ringRef}
-          className="ring"
+          className={`draggable-3d-ring ${ringClassName}`}
           style={{
-            transform: `rotateY(${angle}deg)`,
-            cursor: 'grab',
-            width: `${width * 2}px`,
-            height: `${height * 1.2}px`,
-            margin: '0 auto',
-            position: 'relative',
-            perspective: '1200px',
-            display: 'block',
-          }}
-          onMouseDown={handleMouseDown}
-        >
-          {images?.map((img, i) => {
-            const step = (360 / images.length) * i;
-            return (
-              <div
-                key={i}
-                className="ring-item"
-                style={{
-                  transform: `rotateY(${step}deg) translateZ(${radius}px)`,
-                  width: `${width}px`,
-                  height: `${height}px`,
-                  backgroundImage: `url(${img})`,
-                  backgroundSize: 'cover',
-                  backgroundPosition: 'center',
-                  position: 'absolute',
-                  left: '50%',
-                  top: '50%',
-                  transformOrigin: 'center center',
-                  marginLeft: `-${width / 2}px`,
-                  marginTop: `-${height / 2}px`,
-                  boxShadow: '0 4px 16px rgba(0,0,0,0.15)',
-                  borderRadius: '12px',
-                }}
-              />
-            );
-          })}
-        </div>
-      ) : (
-        <div
-          className="ring"
-          style={{
-            display: 'flex',
-            flexDirection: 'row',
-            cursor: 'grab',
-            overflowX: 'auto',
-            width: '100%',
-            gap: '16px',
-            padding: '8px 0',
+            transformStyle: "preserve-3d",
+            rotateY: rotationY,
+            cursor: draggable ? "grab" : "default",
           }}
         >
-          {images?.map((img, i) => (
-            <div
-              key={i}
-              className="ring-item"
-              style={{
-                minWidth: `${width }px`,
-                height: `${height }px`,
-                backgroundImage: `url(${img})`,
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-                borderRadius: '10px',
-                boxShadow: '0 2px 8px rgba(0,0,0,0.10)',
-              }}
-            />
-          ))}
-        </div>
-      )}
+          <AnimatePresence>
+            {showImages &&
+              images.map((imageUrl, index) => (
+                <motion.div
+                  key={index}
+                  className={`draggable-3d-image ${imageClassName}`}
+                  style={{
+                    transformStyle: "preserve-3d",
+                    backgroundImage: `url(${imageUrl})`,
+                    backgroundSize: "cover",
+                    backgroundRepeat: "no-repeat",
+                    backfaceVisibility: "hidden",
+                    rotateY: index * -angle,
+                    z: -imageDistance * currentScale,
+                    transformOrigin: `50% 50% ${imageDistance * currentScale}px`,
+                    backgroundPosition: getBgPos(index, currentRotationY.current, currentScale),
+                  }}
+                  initial="hidden"
+                  animate="visible"
+                  exit="hidden"
+                  variants={imageVariants}
+                  custom={index}
+                  transition={{
+                    delay: index * staggerDelay,
+                    duration: animationDuration,
+                    ease: easeOut,
+                  }}
+                  whileHover={{ opacity: 1, transition: { duration: 0.15 } }}
+                  onHoverStart={() => {
+                    if (isDragging.current) return;
+                    if (ringRef.current) {
+                      Array.from(ringRef.current.children).forEach((imgEl, i) => {
+                        if (i !== index) imgEl.style.opacity = `${hoverOpacity}`;
+                      });
+                    }
+                  }}
+                  onHoverEnd={() => {
+                    if (isDragging.current) return;
+                    if (ringRef.current) {
+                      Array.from(ringRef.current.children).forEach((imgEl) => {
+                        imgEl.style.opacity = `1`;
+                      });
+                    }
+                  }}
+                />
+              ))}
+          </AnimatePresence>
+        </motion.div>
+      </div>
     </div>
   );
-};
+}
 
 export default ImageRing;
