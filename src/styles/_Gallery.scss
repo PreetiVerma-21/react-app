@@ -5,7 +5,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #111, #222);
+  // background: linear-gradient(135deg, #111, #222);
   overflow: hidden;
 }
 
@@ -29,4 +29,9 @@
   border-radius: 12px;
   box-shadow: 0 8px 16px rgba(0,0,0,0.3);
   transition: transform 0.5s, opacity 0.3s;
+}
+
+.public-container{
+  padding: 2rem;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.3);
 }

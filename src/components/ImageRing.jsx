@@ -2,9 +2,9 @@ import React, { useEffect, useRef, useState, useCallback } from "react";
 
 const ImageRing  = ({
   images,
-  radius = 300,
-  width = 200,
-  height = 250,
+  radius = 10,
+  width = 500,
+  height = 500,
   autoRotate = false,
   rotationSpeed = 10,
 }) => {
@@ -128,8 +128,8 @@ const ImageRing  = ({
               key={i}
               className="ring-item"
               style={{
-                minWidth: `${width * 0.8}px`,
-                height: `${height * 0.8}px`,
+                minWidth: `${width }px`,
+                height: `${height }px`,
                 backgroundImage: `url(${img})`,
                 backgroundSize: 'cover',
                 backgroundPosition: 'center',
