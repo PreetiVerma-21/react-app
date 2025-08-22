@@ -5,10 +5,10 @@ import { motion, AnimatePresence, useMotionValue, easeOut, animate } from "frame
 
 function ImageRing({
   images,
-  width = 300,
+  width = 400,
   perspective = 2000,
   imageDistance = 500,
-  initialRotation = 180,
+  initialRotation = 200,
   animationDuration = 1.5,
   staggerDelay = 0.1,
   hoverOpacity = 0.5,

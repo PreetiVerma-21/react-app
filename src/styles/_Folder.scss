@@ -1,0 +1,127 @@
+.glass-folder {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+//   background: #222;
+
+  .folder-container {
+    position: relative;
+    width: 240px;  // w-60
+    height: 160px; // h-40
+    cursor: pointer;
+    transform-origin: bottom;
+    perspective: 1500px;
+    z-index: 50;
+
+    .folder-tab {
+      background: rgba(30, 144, 255, 0.3);
+      backdrop-filter: blur(10px);
+      width: 100%;
+      height: 100%;
+      border-radius: 16px;
+      border-top-left-radius: 0;
+      transition: all 0.3s ease;
+      position: relative;
+
+      &::after {
+        content: "";
+        position: absolute;
+        bottom: 99%;
+        left: 0;
+        width: 80px;
+        height: 16px;
+        background: rgba(30, 144, 255, 0.3);
+        backdrop-filter: blur(10px);
+        border-top-left-radius: 16px;
+        border-top-right-radius: 16px;
+      }
+
+      &::before {
+        content: "";
+        position: absolute;
+        top: -15px;
+        left: 75.5px;
+        width: 16px;
+        height: 16px;
+        background: rgba(30, 144, 255, 0.3);
+        backdrop-filter: blur(10px);
+        clip-path: polygon(0 35%, 0% 100%, 50% 100%);
+      }
+    }
+
+    .folder-layer {
+      position: absolute;
+      inset: 4px;
+      background: rgba(30, 144, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 16px;
+      transform-origin: bottom;
+      transition: all 0.3s ease;
+      user-select: none;
+
+      &.layer1:hover {
+        transform: rotateX(-20deg);
+      }
+      &.layer2:hover {
+        transform: rotateX(-30deg);
+      }
+      &.layer3:hover {
+        transform: rotateX(-38deg);
+      }
+    }
+
+    .folder-front {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      height: 156px;
+      background: rgba(30, 144, 255, 0.2);
+      backdrop-filter: blur(10px);
+      border-radius: 16px;
+      border-top-right-radius: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transform-origin: bottom;
+      transition: all 0.3s ease;
+
+      &::after {
+        content: "";
+        position: absolute;
+        bottom: 99%;
+        right: 0;
+        width: 146px;
+        height: 16px;
+        background: rgba(30, 144, 255, 0.2);
+        backdrop-filter: blur(10px);
+        border-top-left-radius: 16px;
+        border-top-right-radius: 16px;
+      }
+
+      &::before {
+        content: "";
+        position: absolute;
+        top: -10px;
+        right: 142px;
+        width: 12px;
+        height: 12px;
+        background: rgba(30, 144, 255, 0.2);
+        backdrop-filter: blur(10px);
+        clip-path: polygon(100% 14%, 50% 100%, 100% 100%);
+      }
+
+      &:hover {
+        box-shadow: inset 0 20px 40px rgba(100, 149, 237, 0.4),
+          inset 0 -20px 40px rgba(65, 105, 225, 0.3);
+        transform: rotateX(-46deg) translateY(1px);
+      }
+
+      .icon {
+        font-size: 2rem;
+        color: #fff;
+      }
+    }
+  }
+}

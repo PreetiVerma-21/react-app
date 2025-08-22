@@ -9,6 +9,7 @@ import Dashboard from './pages/Dashboard';
 import { useLocation } from 'react-router-dom';
 import NewHome from './pages/Home/NewHome';
 import Gallery from './pages/Gallery';
+import Documents from './pages/documents';
 
 function App() {
   const location = useLocation();
@@ -29,6 +30,7 @@ function App() {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/new-home" element={<NewHome />} />
           <Route path="/gallery" element={<Gallery/>} />
+          <Route path="/docs" element={<Documents/>} />
         </Routes>
       </main>
       {!hideLayout && <Footer />}

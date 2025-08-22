@@ -1,0 +1,205 @@
+.carousel3d {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: transparent;
+  width: 100%;
+//    border: 2px solid red;
+//   background: lightyellow;
+  min-height: 400px;
+  margin-top: 8rem;
+
+  .carousel-container {
+    position: relative;
+    width: 100%;
+    max-width: 1200px;
+    height: 550px;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    // background: rgba(255, 255, 255, 0.12);
+  }
+
+  .carousel-card {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+    transition: all 0.6s ease;
+    opacity: 0;
+    transform: scale(0.9);
+
+    &.active {
+      opacity: 1;
+      transform: scale(1);
+      z-index: 2;
+    }
+
+    &.next {
+      transform: translateX(40%) scale(0.95);
+      opacity: 0.6;
+      z-index: 1;
+    }
+
+    &.prev {
+      transform: translateX(-40%) scale(0.95);
+      opacity: 0.6;
+      z-index: 1;
+    }
+
+    &.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .carousel-card-inner {
+      display: flex;
+      flex-direction: column;
+      border-radius: 12px;
+      overflow: hidden;
+      background: #fff;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .carousel-card-image {
+      position: relative;
+      height: 200px;
+      background-size: cover;
+      background-position: center;
+
+      .overlay {
+        position: absolute;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.5);
+        color: #fff;
+        text-align: center;
+        padding: 20px;
+
+        h3 {
+          font-size: 20px;
+          margin-bottom: 8px;
+        }
+
+        .line {
+          width: 40px;
+          height: 2px;
+          background: #fff;
+          margin: 0 auto 8px;
+        }
+
+        p {
+          font-size: 14px;
+        }
+      }
+    }
+
+    .carousel-card-content {
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+
+      h3 {
+        font-size: 18px;
+        font-weight: bold;
+      }
+
+      .brand {
+        font-size: 14px;
+        color: #666;
+        margin-bottom: 8px;
+      }
+
+      .description {
+        flex-grow: 1;
+        font-size: 14px;
+        color: #444;
+      }
+
+      .tags {
+        margin: 10px 0;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+
+        span {
+          background: #f5f5f5;
+          padding: 4px 10px;
+          border-radius: 12px;
+          font-size: 12px;
+          color: #666;
+        }
+      }
+
+      .learn-more {
+        display: flex;
+        align-items: center;
+        color: #555;
+        text-decoration: none;
+        font-size: 14px;
+
+        &:hover {
+          text-decoration: underline;
+        }
+
+        svg {
+          margin-left: 6px;
+        }
+      }
+    }
+  }
+
+  .nav-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: linear-gradient(90deg, #9cd5d1 0%, #d5b6de 100%);
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+
+    &.left {
+      left: 20px;
+    }
+    &.right {
+      right: 20px;
+    }
+
+    &:hover {
+      background: #fff;
+    }
+  }
+
+  .indicators {
+    position: absolute;
+    bottom: 20px;
+    width: 100%;
+    text-align: center;
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      background: #ccc;
+      border-radius: 50%;
+      margin: 0 5px;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+
+      &.active {
+        width: 20px;
+        background: #555;
+      }
+    }
+  }
+}
+// .carousel3d-cont{
+//     display: flex;
+//     justify-content: center;
+// }
