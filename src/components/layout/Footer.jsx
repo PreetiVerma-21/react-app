@@ -7,7 +7,7 @@ const Footer = (props) => {
       <div className="footer-container1">
         <div className="footer-container2">
           <span className="footer-text10">SOFT</span>
-          <span>Copyright © 2021 Soft by Creative Tim.</span>
+          <span>Copyright © 2021 Soft UI.</span>
         </div>
         <div className="footer-container3">
           <div className="footer-container4">

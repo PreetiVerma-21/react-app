@@ -10,6 +10,7 @@ import { useLocation } from 'react-router-dom';
 import NewHome from './pages/Home/NewHome';
 import Gallery from './pages/Gallery';
 import Documents from './pages/documents';
+import SliderSection from './pages/SliderSection';
 
 function App() {
   const location = useLocation();
@@ -31,6 +32,7 @@ function App() {
           <Route path="/new-home" element={<NewHome />} />
           <Route path="/gallery" element={<Gallery/>} />
           <Route path="/docs" element={<Documents/>} />
+          <Route path="/slider-section" element={<SliderSection/>} />
         </Routes>
       </main>
       {!hideLayout && <Footer />}
